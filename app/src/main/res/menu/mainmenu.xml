@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/next_screen"
-        android:title="Next Screen"
+        android:title="Hydration History"
         android:icon="@drawable/ic_launcher_background"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
 </menu>

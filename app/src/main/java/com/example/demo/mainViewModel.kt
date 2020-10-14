@@ -13,7 +13,7 @@ class mainViewModel : ViewModel() {
     val time_list = ArrayList<String>()
 
     init{
-        water_count.value = 1
+        water_count.value = 0
     }
 
     fun addonecount(){
