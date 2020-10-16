@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.loader.content.AsyncTaskLoader
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
 import java.util.*
 import javax.security.auth.callback.Callback
 import kotlin.collections.ArrayList
@@ -17,6 +19,7 @@ class mainViewModel : ViewModel() {
 
     val water_count = MutableLiveData<Int>()
     val time_list = ArrayList<String>()
+    lateinit var jobDispatcher: Job
 
     init{
         water_count.value = 0
@@ -24,18 +27,33 @@ class mainViewModel : ViewModel() {
 
     // Working Retrofit
     fun addonecount(){
-        Log.i("CustomTAG","addtocount called"+water_count.value)
         water_count.value = water_count.value?.plus(1)
         time_list.add(Date().toString())
-        service.query.getall().enqueue(object : retrofit2.Callback<JsonArray>{
-            override fun onFailure(call: Call<JsonArray>, t: Throwable) {
-                Log.i("Google", t.toString())
+        logThread("addonecount")
+        jobDispatcher = Job()
+        var scope = CoroutineScope(jobDispatcher + Dispatchers.Main)
+
+        scope.launch {
+            var def = service.query.getall()
+            try{
+                logThread("Couroutine")
+                var result = def.await()
+                Log.i("Google", result.toString())
+            }catch (e: Exception){
+                Log.i("Google", e.toString())
             }
 
-            override fun onResponse(call: Call<JsonArray>, response: Response<JsonArray>) {
-                Log.i("Google", response.body().toString())
-            }
+        }
+    }
 
-        })
+    fun logThread(methodName : String){
+        GlobalScope.launch {
+            Log.i(methodName, Thread.currentThread().name.toString())
+        }
+    }
+
+    override fun onCleared() {
+        jobDispatcher?.cancel()
+        super.onCleared()
     }
 }
