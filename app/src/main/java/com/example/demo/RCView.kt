@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RCView(var list: List<String>) : RecyclerView.Adapter<RCView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RCView.ViewHolder {
-        var inflater = LayoutInflater.from(parent.context)
-        var view = inflater.inflate(R.layout.cards, parent, false)
-        return ViewHolder(view)
+        return ViewHolder.createViewHolder(parent, viewType)
     }
 
     override fun getItemCount(): Int {
@@ -21,11 +19,15 @@ class RCView(var list: List<String>) : RecyclerView.Adapter<RCView.ViewHolder>()
         holder.textView.setText(list[position])
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var textView: TextView
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var textView: TextView = itemView.findViewById(R.id.card_textView)
 
-        init{
-            textView = itemView.findViewById(R.id.card_textView)
+        companion object{
+            fun createViewHolder(parent: ViewGroup, viewType: Int): RCView.ViewHolder{
+                var inflater = LayoutInflater.from(parent.context)
+                var view = inflater.inflate(R.layout.cards, parent, false)
+                return ViewHolder(view)
+            }
         }
     }
 }
