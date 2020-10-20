@@ -9,9 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.demo.ViewModel.mainViewModel
+import com.example.demo.ViewModel.vmFactory
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -27,11 +29,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         imageButton = findViewById(R.id.ib_water_increment)
         imageButton.setOnClickListener(this)
         textView = findViewById(R.id.tv_water_count)
-        viewModel = ViewModelProvider(this).get(mainViewModel::class.java)
+        var viewModelProvider = vmFactory(application)
+        viewModel = ViewModelProvider(this, viewModelProvider).get(mainViewModel::class.java)
+
+
+//        viewModel.loading_status.observe(this, Observer{
+//            startObserving()
+//        })
 
         viewModel.water_count.observe(this, Observer { count ->
             updateUI(count)
         })
+        startObserving()
+
 
     }
 
@@ -55,6 +65,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun updateUI(value: Int){
         textView.setText(value.toString())
+    }
+
+    private fun startObserving(){
+        Log.i("Observer","Started")
+        viewModel.users.observe(this, Observer {
+            var len = it?.size ?: 0
+            Toast.makeText(this,"Length is now $len",Toast.LENGTH_LONG).show()
+        })
     }
 
     override fun onClick(v: View?) {
