@@ -1,6 +1,10 @@
 package com.example.demo
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.demo.Services.NotificationServices
 import com.example.demo.ViewModel.mainViewModel
 import com.example.demo.ViewModel.vmFactory
 
@@ -31,6 +36,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textView = findViewById(R.id.tv_water_count)
         var viewModelProvider = vmFactory(application)
         viewModel = ViewModelProvider(this, viewModelProvider).get(mainViewModel::class.java)
+        NotificationServices.getInstance(this).CreateAndRegisterChannel();
 
 
 //        viewModel.loading_status.observe(this, Observer{
@@ -81,4 +87,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             viewModel.addonecount()
         }
     }
+
+
 }

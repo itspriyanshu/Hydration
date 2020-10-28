@@ -24,9 +24,7 @@ class Repository(private val database: userDatabase) {
         try{
             return database.dao.getalluser()
         }catch (e: Exception){
-            GlobalScope.launch {
-                Log.i("Get all User",e.toString())
-            }
+            Log.i("Get all User",e.toString())
             return MutableLiveData()
 
         }
