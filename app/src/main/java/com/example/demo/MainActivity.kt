@@ -39,18 +39,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         NotificationServices.getInstance(this).CreateAndRegisterChannel();
 
 
-//        viewModel.loading_status.observe(this, Observer{
-//            startObserving()
-//        })
-
         viewModel.water_count.observe(this, Observer { count ->
             updateUI(count)
         })
-        startObserving()
 
-
+        viewModel.users.observe(this, Observer {
+            it?.let{
+                Log.i("Viewing Users", it.toString())
+            }
+        })
     }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.mainmenu, menu)
         return true
@@ -65,6 +63,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
                 return true
             }
+            R.id.clear -> {
+                viewModel.clearAll()
+            }
         }
         return false
     }
@@ -73,20 +74,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textView.setText(value.toString())
     }
 
-    private fun startObserving(){
-        Log.i("Observer","Started")
-        viewModel.users.observe(this, Observer {
-            var len = it?.size ?: 0
-            Toast.makeText(this,"Length is now $len",Toast.LENGTH_LONG).show()
-        })
-    }
-
     override fun onClick(v: View?) {
         var id = v?.id
         if(id == R.id.ib_water_increment){
             viewModel.addonecount()
         }
     }
-
-
 }

@@ -17,7 +17,6 @@ class Repository(private val database: userDatabase) {
         }catch (e: Exception){
             return e.toString()
         }
-
     }
 
     suspend fun getalluser(): LiveData<List<Users>?>{
@@ -30,5 +29,12 @@ class Repository(private val database: userDatabase) {
         }
     }
 
-
+    suspend fun deleteAll(): Int{
+        try{
+            return database.dao.deleteQuery()
+        }catch (e: Exception){
+            Log.i("Error","Cannot clear all data")
+            return 0
+        }
+    }
 }

@@ -26,7 +26,7 @@ class NotificationServices private constructor (var context: Context) {
 
     fun CreateAndRegisterChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val notificationChannel = NotificationChannel(channel_id, channel_name, NotificationManager.IMPORTANCE_LOW)
+            val notificationChannel = NotificationChannel(channel_id, channel_name, NotificationManager.IMPORTANCE_HIGH)
 
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED

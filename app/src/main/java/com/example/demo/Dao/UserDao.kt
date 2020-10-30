@@ -14,6 +14,9 @@ interface Dao{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun adduser(users: Users)
+
+    @Query("DELETE FROM users")
+    suspend fun deleteQuery(): Int
 }
 
 @Database(entities = [Users::class],version = 1)
@@ -21,6 +24,7 @@ abstract class userDatabase: RoomDatabase(){
     abstract val dao: com.example.demo.Dao.Dao
 }
 
+@Volatile
 private lateinit var database: userDatabase
 
 fun getDatabaseInstance(context: Context) : userDatabase {
