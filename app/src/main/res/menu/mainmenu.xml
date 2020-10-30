@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_launcher_background"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/clear"
+        android:title="Clear History"
+        android:icon="@drawable/ic_launcher_foreground"
+        app:showAsAction="never"/>
+
 </menu>

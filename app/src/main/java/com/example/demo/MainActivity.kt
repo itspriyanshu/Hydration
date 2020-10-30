@@ -1,6 +1,10 @@
 package com.example.demo
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +13,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.demo.Services.NotificationServices
+import com.example.demo.ViewModel.mainViewModel
+import com.example.demo.ViewModel.vmFactory
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -27,14 +34,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         imageButton = findViewById(R.id.ib_water_increment)
         imageButton.setOnClickListener(this)
         textView = findViewById(R.id.tv_water_count)
-        viewModel = ViewModelProvider(this).get(mainViewModel::class.java)
+        var viewModelProvider = vmFactory(application)
+        viewModel = ViewModelProvider(this, viewModelProvider).get(mainViewModel::class.java)
+        NotificationServices.getInstance(this).CreateAndRegisterChannel();
+
 
         viewModel.water_count.observe(this, Observer { count ->
             updateUI(count)
         })
 
+        viewModel.users.observe(this, Observer {
+            it?.let{
+                Log.i("Viewing Users", it.toString())
+            }
+        })
     }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.mainmenu, menu)
         return true
@@ -48,6 +62,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 intent.putExtra("time_list",viewModel.time_list)
                 startActivity(intent)
                 return true
+            }
+            R.id.clear -> {
+                viewModel.clearAll()
             }
         }
         return false
