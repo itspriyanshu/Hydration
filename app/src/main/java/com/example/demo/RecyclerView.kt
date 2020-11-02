@@ -15,6 +15,6 @@ class RecyclerView : AppCompatActivity() {
         var list = intent.extras?.get("time_list") as List<String>
 
         recyclerView = findViewById(R.id.rc_view)
-        recyclerView.adapter = RCView(list)
+        recyclerView.adapter = RCView(list, this)
     }
 }

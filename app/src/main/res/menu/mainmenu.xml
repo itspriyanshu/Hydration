@@ -12,4 +12,10 @@
         android:icon="@drawable/ic_launcher_foreground"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/set_alarm"
+        android:title="Set Next Alarm"/>
+
+    <item android:id="@+id/cancel_alarm"
+        android:title="Cancle Alarm"/>
+
 </menu>

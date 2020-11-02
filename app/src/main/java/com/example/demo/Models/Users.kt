@@ -12,14 +12,3 @@ data class Users constructor(
     var age: Int,
     var bio: String
 )
-
-fun List<Users>.convertToDomain(): List<Users>{
-    return map {
-        Users(
-            it.id,
-            it.name,
-            it.age,
-            it.bio
-        )
-    }
-}

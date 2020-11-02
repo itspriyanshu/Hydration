@@ -1,12 +1,16 @@
 package com.example.demo
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -17,6 +21,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.demo.Services.NotificationServices
+import com.example.demo.ViewModel.broadcast
 import com.example.demo.ViewModel.mainViewModel
 import com.example.demo.ViewModel.vmFactory
 
@@ -25,6 +30,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var imageButton: ImageButton
     lateinit var textView: TextView
     lateinit var viewModel: mainViewModel
+    lateinit var alarmManager: AlarmManager
+    lateinit var intent: PendingIntent
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +50,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             updateUI(count)
         })
 
-        viewModel.users.observe(this, Observer {
+        viewModel.drinks.observe(this, Observer {
+            Log.i("MainActivity",it.toString())
             it?.let{
-                Log.i("Viewing Users", it.toString())
+                Log.i("MainActivity",it.size.toString())
             }
         })
+
+        setRepeatingAlarm()
     }
+
+    private fun setRepeatingAlarm() {
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        intent = Intent(this, broadcast::class.java).let {
+            PendingIntent.getBroadcast(this, 0 , it, 0)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.mainmenu, menu)
         return true
@@ -65,6 +83,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.clear -> {
                 viewModel.clearAll()
+            }
+            R.id.cancel_alarm -> {
+                alarmManager.cancel(intent)
+            }
+            R.id.set_alarm -> {
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime()+(10*1000), intent)
+                Toast.makeText(this,"Your Reminder for next drink is set",Toast.LENGTH_LONG).show()
             }
         }
         return false

@@ -3,38 +3,44 @@ package com.example.demo.Repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.demo.Dao.userDatabase
-import com.example.demo.Models.Users
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.demo.Dao.drinkDatabase
+import com.example.demo.Models.DrinkTime
 import java.lang.Exception
 
-class Repository(private val database: userDatabase) {
-    suspend fun addUser(users: Users): String{
+class Repository(private var database: drinkDatabase) {
+    suspend fun add(drinkTime: DrinkTime): String{
         try{
-            database.dao.adduser(users)
-            return "Success"
+            database.dao.add(drinkTime)
         }catch (e: Exception){
-            return e.toString()
+            return "Error Occured"
         }
-    }
-
-    suspend fun getalluser(): LiveData<List<Users>?>{
-        try{
-            return database.dao.getalluser()
-        }catch (e: Exception){
-            Log.i("Get all User",e.toString())
-            return MutableLiveData()
-
-        }
+        return "Successfull"
     }
 
     suspend fun deleteAll(): Int{
         try{
             return database.dao.deleteQuery()
         }catch (e: Exception){
-            Log.i("Error","Cannot clear all data")
-            return 0
+            Log.i("Repository","Error in deleteing times")
         }
+        return 0
+    }
+
+    suspend fun getAll(): List<DrinkTime>{
+        try{
+            return database.dao.getalldrinks()
+        }catch (e: Exception){
+            Log.i("Repository","Error in fetching results")
+        }
+        return ArrayList()
+    }
+
+    suspend fun getLiveAll(): LiveData<List<DrinkTime>?>{
+        try{
+            return database.dao.getlivedrinks()
+        }catch (e: Exception){
+            Log.i("Repository","Error in fetching live results")
+        }
+        return MutableLiveData()
     }
 }

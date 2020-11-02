@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "drinktime")
 data class DrinkTime(
-    @PrimaryKey
-    var time: String
+    @PrimaryKey(autoGenerate = true)
+    var id: Int,
+    var time: String,
+    var glasse: Int
 )
