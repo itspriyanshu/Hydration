@@ -85,6 +85,9 @@ class mainViewModel(var application: Application) : ViewModel() {
     fun clearAll() {
         CoroutineScope(Dispatchers.IO + jobDispatcher).launch{
             var res = repository.deleteAll()
+            withContext(Dispatchers.Main){
+                _water_count.value = 0
+            }
             Log.i("Result of Deletion",res.toString())
         }
     }

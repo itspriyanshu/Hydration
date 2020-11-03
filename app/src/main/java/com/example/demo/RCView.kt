@@ -8,8 +8,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.demo.Models.DrinkTime
 
-class RCView(var list: List<String>, var context: Context) : RecyclerView.Adapter<RCView.ViewHolder>() {
+class RCView(var list: List<DrinkTime>, var context: Context) : RecyclerView.Adapter<RCView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RCView.ViewHolder {
         return ViewHolder.Companion.from(parent)
     }
@@ -19,11 +20,11 @@ class RCView(var list: List<String>, var context: Context) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: RCView.ViewHolder, position: Int) {
-        holder.time.setText(list[position])
-        holder.number.setText("1")
+        holder.time.setText(list[position].time)
+        holder.number.setText((position+1).toString())
         holder.glasses.removeAllViews()
         var params = LinearLayout.LayoutParams(60,60)
-        for(x in 1..3){
+        for(x in 1..list[position].glasse){
             var imageView = ImageView(context)
             imageView.setImageResource(R.drawable.ic_local_drink_grey_120px)
             imageView.layoutParams = params
