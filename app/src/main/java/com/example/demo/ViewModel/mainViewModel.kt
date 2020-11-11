@@ -44,6 +44,9 @@ class mainViewModel(var application: Application) : ViewModel() {
     fun addonecount(){
         viewModelScope.launch{
             var result = add_new_data()
+            if(result.equals("success")){
+                _water_count.value = _water_count.value?.plus(1);
+            }
             Log.i("Result of Adding a User", result)
         }
     }
@@ -59,12 +62,6 @@ class mainViewModel(var application: Application) : ViewModel() {
     suspend fun fetch(): Int{
         return withContext(Dispatchers.IO){
             var list = database.dao.getalldrinks()
-            _drinks = database.dao.getlivedrinks()
-            drinks = Transformations.map(_drinks){
-                Log.i("Something","Happened")
-                _water_count.value = water_count.value?.plus(1)
-                it
-            }
             list.size
         }
     }
