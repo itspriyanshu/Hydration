@@ -1,6 +1,5 @@
 package com.example.demo.Models
 
-import androidx.lifecycle.Transformations.map
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

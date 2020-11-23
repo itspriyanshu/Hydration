@@ -10,7 +10,10 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.*
 import com.example.demo.Dao.getDrinkDatabaseInstance
 import com.example.demo.MainActivity
+import com.example.demo.Models.CustomResponse
 import com.example.demo.Models.DrinkTime
+import com.example.demo.NetworkUtils.NetworkExecutor
+import com.example.demo.NetworkUtils.OlaMoneyRequest
 import com.example.demo.R
 import com.example.demo.Repository.Repository
 import com.example.demo.Services.NotificationServices
@@ -42,6 +45,12 @@ class mainViewModel(var application: Application) : ViewModel() {
 
     // Working Retrofit
     fun addonecount(){
+        var request: OlaMoneyRequest? = OlaMoneyRequest.Builder().setURL("https://jsonplaceholder.typicode.com/posts/1").build()
+        Log.i("Call", request.toString())
+        request?.let{
+            Log.i("Call", "Initiating call")
+            NetworkExecutor(CustomResponse::class.java).makeAsyncCall(request.createCall())
+        }
         viewModelScope.launch{
             var result = add_new_data()
             if(result.equals("success")){
